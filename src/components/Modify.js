@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
 
-export default function AddCar(props) {
+export default function Modify(props) {
 
     const [open, setOpen] = React.useState(false);
     const [car, setCar] = React.useState({
@@ -20,11 +20,20 @@ export default function AddCar(props) {
     });
 
     const handleClickOpen = () => {
-      setOpen(true);
+        console.log(props.params)
+        setCar({
+            brand: props.params.data.brand,
+            model: props.params.data.model,
+            color: props.params.data.color,
+            fuel: props.params.data.fuel,
+            price: props.params.data.price,
+            year: props.params.data.year,
+        })
+         setOpen(true);
     };
   
     const handleClose = () => {
-      setOpen(false);
+         setOpen(false);
     };
 
     const inputChanged =(event)=> {
@@ -33,16 +42,15 @@ export default function AddCar(props) {
     }
 
 
-    const handleSave =()=> {
-        
-        props.addCar(car);
+    const updateCar =()=> {        
+        props.updateCar(props.params.value, car);
         handleClose();
     }
   
     return (
         <div>
-          <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-            Add New Car
+          <Button size="small"  color="primary" onClick={handleClickOpen}>
+            Edit
           </Button>
           <Dialog
             open={open}
@@ -50,7 +58,7 @@ export default function AddCar(props) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">New Car</DialogTitle>
+            <DialogTitle id="alert-dialog-title">Edit Car</DialogTitle>
             <DialogContent>
                 <TextField
                 autoFocus
@@ -106,7 +114,7 @@ export default function AddCar(props) {
               <Button onClick={handleClose} color="primary">
                 Disagree
               </Button>
-              <Button onClick={handleSave} color="primary" autoFocus>
+              <Button onClick={updateCar} color="primary" autoFocus>
                 Agree
               </Button>
             </DialogActions>

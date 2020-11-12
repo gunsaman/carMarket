@@ -5,6 +5,8 @@ import "ag-grid-community/dist/styles/ag-theme-material.css";
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import AddCar from './AddCar';
+import Modify from './Modify';
+
 
 export default function Carlist() {
     const [cars, setCars] = useState([]);
@@ -42,6 +44,16 @@ export default function Carlist() {
         .catch(err=> console.error(err))
 
     }
+    
+    const editCar = (link, car) => {
+        fetch(link, {
+            method:'PUT',
+            headers: {'Content-type': 'application/json'},
+            body:JSON.stringify(car)
+        })
+            .then(_ => getCars())
+            .catch(err => console.error(err))
+    }
 
     const handleClose =() => {
         setOpen(false);
@@ -53,8 +65,14 @@ export default function Carlist() {
         {headerName: 'Model', field: 'model', sortable: true, filter:true},
         {headerName: 'Color', field: 'color', sortable: true, filter:true},
         {headerName: 'Fuel', field: 'fuel', sortable: true, filter:true},
-        {headerName: 'Year', field: 'year', sortable: true, filter:true},
-        {headerName: 'Price', field: 'price', sortable: true, filter:true},
+        {headerName: 'Year', field: 'year', sortable: true, filter:true, width: 120},
+        {headerName: 'Price', field: 'price', sortable: true, filter:true, width:120},
+        {
+            headerName: '',
+            width:70,
+            field:'_links.self.href',
+            cellRendererFramework: params => <Modify updateCar={editCar} params={params} /> 
+        },
         {
             headerName: '', 
             field:'_links.self.href',
